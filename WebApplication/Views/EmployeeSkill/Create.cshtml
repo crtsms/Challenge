@@ -1,0 +1,42 @@
+﻿@model WebApplication.ViewModels.EmployeeSkillVM
+@{
+    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container-fluid">
+        <h4>EmployeeSkill</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Employee.Id)
+
+        <div class="form-group col-md-12">
+            <label class="control-label col-md-4">Years of Experience</label>
+
+            <select class="form-control col-md-8" name="SkillId">
+
+                @foreach (var allSkills in Model.Skills)
+                {
+                    <option value="@allSkills.Id">@allSkills.Name</option>
+
+                }
+            </select>
+        </div>
+
+        <div class="form-group col-md-12">
+            <label class="control-label col-md-4">Years of Experience</label>
+
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.YearsExperience, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.YearsExperience, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <input type="submit" value="Save" class="btn btn-success" />
+        </div>
+    </div>
+}
