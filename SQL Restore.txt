@@ -1,4 +1,4 @@
-sqlcmd -S castwk120\SQLExpress
+sqlcmd -S machine-name\SQLExpress
 
 RESTORE DATABASE EmployeeSkills
 FROM DISK = N'C:\EmployeeSkills.bak'

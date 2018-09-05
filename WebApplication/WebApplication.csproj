@@ -161,6 +161,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EmployeeSkillController.cs" />
     <Compile Include="Controllers\SkillController.cs" />
+    <Compile Include="Helper\HtmlRequestHelper.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\EmployeeSkill.cs" />
     <Compile Include="Global.asax.cs">
@@ -187,18 +188,22 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\crtsms - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.custom.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -217,11 +222,16 @@
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Skill\Index.cshtml" />
     <Content Include="Views\EmployeeSkill\Delete.cshtml" />
-    <Content Include="Views\EmployeeSkill\Details.cshtml" />
     <Content Include="Views\EmployeeSkill\Edit.cshtml" />
     <Content Include="Views\EmployeeSkill\Index.cshtml" />
     <Content Include="Views\EmployeeSkill\Create.cshtml" />
     <Content Include="Views\Shared\_LayoutModal.cshtml" />
+    <Content Include="Views\Employee\Details.cshtml" />
+    <Content Include="Views\Skill\Create.cshtml" />
+    <Content Include="Views\Skill\Delete.cshtml" />
+    <Content Include="Views\Skill\Details.cshtml" />
+    <Content Include="Views\Skill\Edit.cshtml" />
+    <Content Include="Views\Shared\_LayoutWidget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
 using WebApplication.DAL;
 using WebApplication.Model;
 using WebApplication.ViewModels;
@@ -19,17 +16,27 @@ namespace WebApplication.Controllers
         private TreamsContext db = new TreamsContext();
 
         // GET: Employee
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            //Retrieve the Employee information
-            var viewModel = new EmployeeVM();
+            //Retrieve the Employee information and Map 
+            List<EmployeeVM> employeeVM = new List<EmployeeVM>();
+            foreach (Employee employee in await db.Employees.ToListAsync()) employeeVM.Add(employee);
 
-            //Map to ModeView
-            viewModel.Employees = db.Employees.ToList();
-            viewModel.Skills = db.Skills.ToList();
+            return View(employeeVM);
+        }
 
-            return View(viewModel);
+        // GET: Employee/Details/5
+        public async Task<ActionResult> Details(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            //Retrieve the Employee information and Map to ModeView
+            EmployeeVM employeeVM = await db.Employees.FindAsync(id);
+            if (employeeVM == null)
+                return HttpNotFound();
+
+            return View(employeeVM);
         }
 
         // GET: Employee/Create
@@ -43,45 +50,34 @@ namespace WebApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Employee collection)
+        public async Task<ActionResult> Create([Bind(Include = "Id,FirstName,LastName,PhoneNumber")] EmployeeVM employeeVM)
         {
             if (ModelState.IsValid)
             {
-                db.Employees.Add(collection);
-                db.SaveChanges();
+                //Map to Model
+                Employee employee = employeeVM;
+                db.Employees.Add(employee);
 
-                return RedirectToAction("Edit", new RouteValueDictionary(
-                    new { controller = "Employee", action = "Edit", Id = collection.Id }));
+                //Call the EF to save chages
+                await db.SaveChangesAsync();
+                return RedirectToAction("Edit", new { employee.Id });
             }
 
-            return View(collection);
+            return View(employeeVM);
         }
 
         // GET: Employee/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
-            //Retrieve the Employee information
-            var viewModel = new EmployeeVM();
-            var result = db.Employees.Find(id);
-
-            //Map to ModeView
-            viewModel.Employees = new List<Employee> { result };
-            viewModel.Skills = db.Skills.ToList();
-            viewModel.EmployeeSkills = db.EmployeeSkills.Where(x => x.EmployeeId == result.Id).ToList();
-
-            if (viewModel.Employees == null)
-            {
-                viewModel.Skills = db.Skills.ToList();
+            //Retrieve the Employee information and Map to ModeView
+            EmployeeVM employeeVM = await db.Employees.FindAsync(id);
+            if (employeeVM == null)
                 return HttpNotFound();
-            }
 
-            return View(viewModel);
-
+            return View(employeeVM);
         }
 
         // POST: Employee/Edit/5
@@ -89,69 +85,59 @@ namespace WebApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,FirstName,LastName,PhoneNumber")] EmployeeVM employeeVM)
         {
-            //Prepare user data to Update
-            var employee = db.Employees.Find(id);
+            if (ModelState.IsValid)
+            {
+                //Map the modelView to Model 
+                Employee employee = employeeVM;
+                db.Entry(employee).State = EntityState.Modified;
 
-            if (employee == null)
-                return HttpNotFound();
-
-            //Map the modelView to Model 
-            employee.FirstName = collection["FirstName"];
-            employee.LastName = collection["LastName"];
-            employee.PhoneNumber = collection["PhoneNumber"];
-
-            db.Entry(employee).State = EntityState.Modified;
-
-            //Call the EF to save chages
-            db.SaveChanges();
-            return RedirectToAction("Index");
-
+                //Call the EF to save chages
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return View(employeeVM);
         }
 
         // GET: Employee/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
-            //Retrieve Employee information for user comfirmation before delete
+            
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
+            //Retrieve Employee information for user comfirmation before delete
+            EmployeeVM employeeVM = await db.Employees.FindAsync(id);
+            if (employeeVM == null)
                 return HttpNotFound();
 
-            return View(employee);
+            return View(employeeVM);
         }
 
         // POST: Employee/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
             //Delete all the Employ Skills
-            foreach(var item in db.Employees.Find(id).EmployeeSkills.ToList())
-            {
-                EmployeeSkill employeeSkill = db.EmployeeSkills.Find(item.Id);
+            foreach (EmployeeSkill employeeSkill in await db.EmployeeSkills.Where(x => x.EmployeeId == id).ToListAsync())
                 db.EmployeeSkills.Remove(employeeSkill);
-            }
 
             //Delete the employee
-            Employee employee = db.Employees.Find(id);
+            Employee employee = await db.Employees.FindAsync(id);
             db.Employees.Remove(employee);
 
             //Call the EF to save chages
-            db.SaveChanges();
-
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }

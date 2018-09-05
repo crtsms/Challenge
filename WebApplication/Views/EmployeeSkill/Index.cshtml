@@ -1,45 +1,51 @@
-﻿@model IEnumerable<WebApplication.Model.EmployeeSkill>
+﻿@model IEnumerable<WebApplication.ViewModels.EmployeeSkillVM>
 
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutWidget.cshtml";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h4>
+    Skills
+</h4>
+<hr />
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Employee.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Skill.Name)
+            @Html.DisplayNameFor(model => model.Skill)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.YearsExperience)
         </th>
-        <th></th>
+        <th>Options</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Employee.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Skill.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.YearsExperience)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Skill)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearsExperience)
+            </td>
+            <td>
+                <div class="btn-group btn-group-xs" role="group">
+                    <button type="button" data-url="@Url.Action("Edit", "EmployeeSkill", new { Id = item.Id })"
+                            class="btn btn-default btn-sm btn-open-modal" data-toggle="modal" data-target=".bs-example-modal-md">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" data-url="@Url.Action("Delete", "EmployeeSkill", new { Id = item.Id })"
+                            class="btn btn-danger btn-sm btn-open-modal" data-toggle="modal" data-target=".bs-example-modal-md">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
 
 </table>
+<button type="button" data-url="@Url.Action("Create", "EmployeeSkill", new { Id = ViewBag.EmployeeId })"
+        class="btn btn-primary btn-open-modal" data-toggle="modal" data-target=".bs-example-modal-md">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Skill
+</button>

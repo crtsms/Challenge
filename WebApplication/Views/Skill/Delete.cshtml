@@ -1,0 +1,62 @@
+﻿@model WebApplication.ViewModels.SkillVM
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top:10px;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("Index", "Skill")"> @Html.Controller()</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Html.Action()</li>
+        </ol>
+    </nav>
+</div>
+<div class="row">
+
+    <div class="col-sm-12">
+
+        <h4>Are you sure you want to delete this?</h4>
+
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+        </dl>
+
+    </div>
+
+        @using (Html.BeginForm())
+        {
+            <div class="col-sm-12">
+                @Html.AntiForgeryToken()                
+            </div>
+            <div class="col-sm-12">
+                <a href="@Url.Action("Index", "Skill")" class="btn btn-default">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    Close
+                </a>
+
+                <button type="submit" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    Delete
+                </button>                
+            </div>
+        }
+</div>

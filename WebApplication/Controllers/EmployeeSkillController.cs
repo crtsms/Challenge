@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using WebApplication.DAL;
-using WebApplication.Model;
 using WebApplication.ViewModels;
+using WebApplication.Model;
 
 namespace WebApplication.Controllers
 {
@@ -18,14 +18,40 @@ namespace WebApplication.Controllers
         //Database context
         private TreamsContext db = new TreamsContext();
 
-        // GET: EmployeeSkill/Create
-        public ActionResult Create(int EmployeeId)
+        // GET: EmployeeSkill
+        public async Task<ActionResult> Index(int id)
         {
-            //Retrieve the Employee And Skills information and Map to ModelView
-            var viewModel = new EmployeeSkillVM();
-            viewModel.Employee = db.Employees.Find(EmployeeId);
-            viewModel.Skills = db.Skills.ToList();
-            return View(viewModel);
+            //Retrieve the Employee information and Map 
+            List<EmployeeSkillVM> employeeSkillVM = new List<EmployeeSkillVM>();
+            foreach (EmployeeSkill employeeSkill in await db.EmployeeSkills.Where(x => x.EmployeeId == id).ToListAsync())
+                employeeSkillVM.Add(employeeSkill);
+
+            //return ID in view bag, in case of employee don't have any skill yet
+            //this ID is used in the link to add new skill
+            ViewBag.EmployeeId = id;
+
+            return View(employeeSkillVM);
+        }
+
+        // GET: EmployeeSkill/Create
+        public async Task<ActionResult> Create(int id)
+        {
+            if(await db.Employees.FindAsync(id) == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            //Retrieve the Employee information and Map to ModeView
+            EmployeeSkillVM employeeSkillVM = new EmployeeSkillVM();
+            employeeSkillVM.EmployeeId = id;
+
+            //Retrieve all skill on database not assigned to Employee
+            var skills = (from s in db.Skills
+                          .Except(from es in db.EmployeeSkills where es.EmployeeId == id select es.Skill)
+                          select new SelectListItem { Value = s.Id.ToString(), Text = s.Name });
+
+            //Attach to modelView
+            employeeSkillVM.Skills = skills;
+
+            return View(employeeSkillVM);
         }
 
         // POST: EmployeeSkill/Create
@@ -33,68 +59,44 @@ namespace WebApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create([Bind(Include = "EmployeeId,SkillId,YearsExperience")] EmployeeSkillVM employeeSkillVM)
         {
-
-            //Getting the object associated with its id
-            Int32 employee = Convert.ToInt32(collection["Employee.Id"]);
-            Int32 skill = Convert.ToInt32(collection["SkillId"]);
-            Int32 years = Convert.ToInt32(collection["YearsExperience"]);
-
-            //Check if skill already registered for the employee
-            if (db.Employees.FirstOrDefault(x => x.Id == employee).EmployeeSkills.FirstOrDefault(x => x.SkillId == skill) != null)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("SkillId", "This skill already registered for the Employee");
-                var viewModel = new EmployeeSkillVM();
-                viewModel.Employee = db.Employees.FirstOrDefault(x => x.Id == employee);
-                viewModel.Skills = db.Skills.ToList();
-                return View(viewModel);
-            }
-            else
-            {
-                //Create the Model in order to save on database 
-                EmployeeSkill employeeSkill = new EmployeeSkill
-                {
-                    Employee = db.Employees.Find(employee),
-                    Skill = db.Skills.Find(skill),
-                    YearsExperience = years
-                };
-
-                db.EmployeeSkills.Add(employeeSkill);
+                //Map to Model
+                EmployeeSkill employeeSkill = employeeSkillVM;
+                employeeSkill.Skill = await db.Skills.FindAsync(employeeSkillVM.SkillId);
+                employeeSkill.Employee = await db.Employees.FindAsync(employeeSkillVM.EmployeeId);
 
                 //Call the EF to save chages
-                db.SaveChanges();
-
-                return RedirectToAction("Edit", new RouteValueDictionary(
-                    new { controller = "Employee", action = "Edit", Id = employee }));
+                db.EmployeeSkills.Add(employeeSkill);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Edit", "Employee", new { Id = employeeSkill.EmployeeId });
             }
-         
+
+            return View(employeeSkillVM);
         }
 
         // GET: EmployeeSkill/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
-            //Retrieve the Employee And Skills information and Map to ModelView
-            EmployeeSkill employeeSkill = db.EmployeeSkills.Find(id);
-            if (employeeSkill == null)
-            {
-                return HttpNotFound();
-            }
+            //Retrieve the Employee information and Map to ModeView
+            EmployeeSkillVM employeeSkillVM = await db.EmployeeSkills.FindAsync(id);
 
-            var viewModel = new EmployeeSkillVM();
-            viewModel.Employee = db.EmployeeSkills.Find(id).Employee;
-            viewModel.Skills = db.Skills.ToList();
-            viewModel.YearsExperience = employeeSkill.YearsExperience;
+            //Retrieve all skill on database not assigned to Employee
+            var skills = (from s in db.Skills
+                          .Except(from es in db.EmployeeSkills
+                                  where es.EmployeeId == employeeSkillVM.EmployeeId && es.Id != id
+                                  select es.Skill)
+                          select new SelectListItem{ Value = s.Id.ToString(), Text = s.Name });
 
-            ViewBag.SkillId = employeeSkill.SkillId;
+            //Attach to modelView
+            employeeSkillVM.Skills = skills;
 
-            return View(viewModel);
-
+            return View(employeeSkillVM);
         }
 
         // POST: EmployeeSkill/Edit/5
@@ -102,68 +104,73 @@ namespace WebApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,EmployeeId,Skill,SkillId,YearsExperience")] EmployeeSkillVM employeeSkillVM)
         {
-            //Prepare user data to Update
-            var employeeSkills = db.EmployeeSkills.Find(id);
+            if (ModelState.IsValid)
+            {
+                //Map the modelView to Model 
+                EmployeeSkill employeeSkill = employeeSkillVM;
+                db.Entry(employeeSkill).State = EntityState.Modified;
 
-            //Getting the object associated with its id
-            Int32 employee = Convert.ToInt32(collection["Employee.Id"]);
-            Int32 skill = Convert.ToInt32(collection["SkillId"]);
-            Int32 years = Convert.ToInt32(collection["YearsExperience"]);
-
-
-            //Map the modelView to Model 
-            employeeSkills.Employee = db.Employees.Find(employee);
-            employeeSkills.Skill = db.Skills.Find(skill);
-            employeeSkills.YearsExperience = years;
-
-            db.Entry(employeeSkills).State = EntityState.Modified;
-
-            //Call the EF to save chages
-            db.SaveChanges();
-
-            return RedirectToAction("Edit", new RouteValueDictionary(
-                new { controller = "Employee", action = "Edit", Id = employee }));
+                //Call the EF to save chages
+                await db.SaveChangesAsync();
+                return RedirectToAction("Edit", "Employee", new { Id = employeeSkill.EmployeeId });
+            }
+            return View(employeeSkillVM);
         }
 
         // GET: EmployeeSkill/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);            
 
-            //Retrieve the Employee And Skills information and Map to ModelView
-            EmployeeSkill employeeSkill = db.EmployeeSkills.Find(id);
-            if (employeeSkill == null)
-            {
+            //Retrieve Employee information for user comfirmation before delete
+            EmployeeSkillVM employeeSkillVM = await db.EmployeeSkills.FindAsync(id);
+            if (employeeSkillVM == null)
                 return HttpNotFound();
-            }
 
-            var viewModel = new EmployeeSkillVM();
-            viewModel.Employee = db.EmployeeSkills.Find(id).Employee;
-            viewModel.Skills = db.Skills.ToList();
-            viewModel.YearsExperience = employeeSkill.YearsExperience;
-
-            ViewBag.SkillId = employeeSkill.SkillId;
-
-            return View(viewModel);
+            return View(employeeSkillVM);
         }
 
         // POST: EmployeeSkill/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
             //Delete the Skill
-            EmployeeSkill employeeSkill = db.EmployeeSkills.Find(id);
+            EmployeeSkill employeeSkill = await db.EmployeeSkills.FindAsync(id);
             db.EmployeeSkills.Remove(employeeSkill);
-            db.SaveChanges();
 
-            return RedirectToAction("Edit", new RouteValueDictionary(
-                new { controller = "Employee", action = "Edit", Id = employeeSkill.EmployeeId }));
+            //Call the EF to save chages
+            await db.SaveChangesAsync();
+            return RedirectToAction("Edit", "Employee", new { Id = employeeSkill.EmployeeId });
+        }
+
+        public ActionResult SkillAlreadyAssigned(int? Id, int SkillId, int EmployeeId)
+        {
+            int skills = 0;
+
+            //Validation for new objects            
+            if (Id == null){
+                skills = (from es in db.EmployeeSkills
+                          where es.EmployeeId == EmployeeId
+                          && es.SkillId == SkillId
+                          select es.Id).Count();
+            }else{
+                skills = (from es in db.EmployeeSkills
+                          where es.EmployeeId == EmployeeId
+                          && es.SkillId == SkillId
+                          && es.Id != Id
+                          select es.Id).Count();
+            }
+
+            //If Skill already assigned to employee, return false to not allow the
+            //same skill assigned to the same employee again
+            if (skills > 0)
+                return Json(false, JsonRequestBehavior.AllowGet);
+            else
+                return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

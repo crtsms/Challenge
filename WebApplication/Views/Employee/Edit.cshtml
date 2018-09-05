@@ -2,153 +2,63 @@
 
 @{
     ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Edit Employee</h2>
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    
+    <div class="row" style="margin-top:10px;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("Index", "Employee")"> @Html.Controller()</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Html.Action()</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
 
-    <div class="form-horizontal">
-        <div class="col-lg-6">
-            <h4>Basic Details</h4>
+        <div class="col-sm-6">
+            <h4>Basic info</h4>
             <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.Employees.FirstOrDefault().Id)
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+            @Html.HiddenFor(model => model.Id)
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Employees.FirstOrDefault().FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Employees.FirstOrDefault().FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Employees.FirstOrDefault().FirstName, "", new { @class = "text-danger" })
-                </div>
+                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Employees.FirstOrDefault().LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Employees.FirstOrDefault().LastName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Employees.FirstOrDefault().LastName, "", new { @class = "text-danger" })
-                </div>
+                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "help-block text-danger" })                    
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Employees.FirstOrDefault().PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Employees.FirstOrDefault().PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Employees.FirstOrDefault().PhoneNumber, "", new { @class = "text-danger" })
-                </div>
+                @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "help-block text-danger" })                    
             </div>
 
-        </div>
-
-        <div class="col-lg-6">
-            <h4>Skills</h4>
-            <hr />
-            <div class="col-lg-6"><b>Skill</b></div>
-            <div class="col-lg-2"><b>Years Exp.</b></div>
-            <div class="col-lg-4"></div>
-
-            @{
-                foreach (var skill in Model.EmployeeSkills)
-                {
-                    @:
-                    <div class="form-group">
-                        <div class="col-lg-6">  
-                            @skill.Skill.Name
-                        </div>
-                         
-                        <div class="col-lg-2">
-                            @skill.YearsExperience
-                        </div>
-
-                        <div class="col-lg-2">
-                            <button type="button" data-bind="@skill.Id" data-url="" class="btn btn-danger btn-delete-skill"
-                                    data-toggle="modal" data-target=".bs-example-modal-md">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        
-                        <div class="col-lg-2">
-                            <button type="button" data-bind="@skill.Id" data-url="" class="btn btn-default btn-edit-skill" 
-                                    data-toggle="modal" data-target=".bs-example-modal-md">
-                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                    </div>
-                }
-            }
-
-            <div class="col-lg-12">
-                <button type="button" class="btn btn-primary" id="btn-add-skill"
-                        data-toggle="modal" data-target=".bs-example-modal-md">
-                    Add another skill
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    Save
                 </button>
             </div>
         </div>
 
-    </div>
-
-    <div class="col-lg-12">
-        <input type="submit" value="Save" class="btn btn-success" />
-    </div>
-
-    <!-- Large modal -->
-
-    <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                ...
+        <div class="col-sm-6">
+            <div class="content-place-holder" data-url="@Url.Action("Index", "EmployeeSkill", new { Id = Model.Id })">
             </div>
         </div>
+            
     </div>
-
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-
-    <script>
-
-        $('#btn-add-skill').on('click', function (evt) {
-            evt.preventDefault();
-
-            var Employee = $('#Id').val();
-            var url = "/EmployeeSkill/Create?EmployeeId=" + Employee;
-            var $PlaceHolder = $('.modal-content');
-
-            $.get(url, function (data) {
-                $PlaceHolder.html(data);
-            });
-        });
-
-        $('.btn-edit-skill').on('click', function (evt) {
-            evt.preventDefault();
-
-            var SkillToEdit = $(this).data('bind');
-
-            var url = "/EmployeeSkill/Edit/" + SkillToEdit;
-            var $PlaceHolder = $('.modal-content');
-
-            $.get(url, function (data) {
-                $PlaceHolder.html(data);
-            });
-
-        });
-        $('.btn-delete-skill').on('click', function (evt) {
-            evt.preventDefault();
-
-            var SkillToDelete = $(this).data('bind');
-
-            var url = "/EmployeeSkill/Delete/" + SkillToDelete;
-            var $PlaceHolder = $('.modal-content');
-
-            $.get(url, function (data) {
-                $PlaceHolder.html(data);
-            });
-
-        });
-    </script>
 }

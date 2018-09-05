@@ -56,6 +56,5 @@ namespace WebApplication.DAL
 
             */
         }
-
     }
 }
