@@ -40,11 +40,11 @@ textarea {
 .navbar-inverse .navbar-nav > li > a:before  {
     content: "";
     position: absolute;
-    width: 100%;
+    width: 80%;
     height: 2px;
     bottom: 0;
-    left: 0;
-    background-color: #000;
+    left: 10%;
+    background-color: #fff;
     visibility: hidden;
     -webkit-transform: scaleX(0);
     transform: scaleX(0);
