@@ -48,13 +48,13 @@
                 @Html.AntiForgeryToken()                
             </div>
             <div class="col-sm-12">
-                <a href="@Url.Action("Index", "Skill")" class="btn btn-default">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    Close
+                <a href="@Url.Action("Index", "Skill")" class="btn btn-secondary">
+                    <i class="fa fa-times"></i>
+                    No
                 </a>
 
                 <button type="submit" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    <i class="fa fa-trash"></i>
                     Delete
                 </button>                
             </div>

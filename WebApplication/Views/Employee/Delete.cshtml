@@ -50,15 +50,15 @@
         {
             @Html.AntiForgeryToken()
 
-            <a href="@Url.Action("Index", "Employee")" class="btn btn-default">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                Close
-            </a>
+        <a href="@Url.Action("Index", "Employee")" class="btn btn-secondary">
+            <i class="fa fa-times"></i>
+            No
+        </a>
 
-            <button type="submit" class="btn btn-danger">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                Delete
-            </button>
+        <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash"></i>
+            Delete
+        </button>
 
         }
 

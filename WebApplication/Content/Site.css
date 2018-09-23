@@ -22,27 +22,27 @@ select,
 textarea {
     max-width: 280px;
 }
-.navbar-inverse {
+.bg-orange {
     background-color: #d35400;
     border-color: #d35400;
 }
-.navbar-inverse .navbar-brand {
+.bg-orange .navbar-brand {
     color: #fff;
 }
-.navbar-inverse .navbar-nav > li > a {
+.nav-link {
     position: relative;
     display: block;
     color: #fff;
 }
-.navbar-inverse .navbar-nav > li > a:hover {
+.nav-link:hover {
     color: #fff;
 }
-.navbar-inverse .navbar-nav > li > a:before  {
+.nav-link:before {
     content: "";
     position: absolute;
     width: 80%;
     height: 2px;
-    bottom: 0;
+    bottom: -5px;
     left: 10%;
     background-color: #fff;
     visibility: hidden;
@@ -51,7 +51,7 @@ textarea {
     -webkit-transition: all 0.3s ease-in-out 0s;
     transition: all 0.3s ease-in-out 0s;
 }
-.navbar-inverse .navbar-nav > li > a:hover:before {
+.nav-link:hover:before {
     visibility: visible;
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
