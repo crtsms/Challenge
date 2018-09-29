@@ -20,16 +20,18 @@ namespace WebApplication.Api
 
         // GET: api/Employee/5
         [ResponseType(typeof(EmployeeVM))]
-        [Route("api/employee/{id}")]
-        public async Task<IHttpActionResult> GetEmployeeVM(int id)
+        public async Task<IHttpActionResult> GetEmployee(int id)
         {
+            if (id == null)
+                return BadRequest();
+
+            //Retrieve the Employee information and Map to ModeView
             EmployeeVM employeeVM = await db.Employees.FindAsync(id);
             if (employeeVM == null)
-            {
-                return NotFound();
-            }
+                return BadRequest();
 
             return Ok(employeeVM);
+
         }
 
         // PUT: api/Employee/5
