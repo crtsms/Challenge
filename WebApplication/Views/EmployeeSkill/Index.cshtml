@@ -9,39 +9,41 @@
     Skills
 </h4>
 <hr />
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Skill)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.YearsExperience)
-        </th>
-        <th>Options</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table table-sm table-striped data-table display compact">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Skill)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.YearsExperience)
-            </td>
-            <td>
-                <button type="button" data-url="@Url.Action("Edit", "EmployeeSkill", new { Id = item.Id })"
-                        class="btn btn-default btn-sm btn-open-modal btn-sm" data-toggle="modal" data-target=".bs-example-modal-md">
-                    <i class="fa fa-pencil"></i>
-                </button>
-                <button type="button" data-url="@Url.Action("Delete", "EmployeeSkill", new { Id = item.Id })"
-                        class="btn btn-danger btn-sm btn-open-modal btn-sm" data-toggle="modal" data-target=".bs-example-modal-md">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </td>
+            <th style="width:40%">
+                @Html.DisplayNameFor(model => model.Skill)
+            </th>
+            <th style="width:40%">
+                @Html.DisplayNameFor(model => model.YearsExperience)
+            </th>
+            <th class="action-columm" style="width:20%">Options</th>
         </tr>
-    }
-
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Skill)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.YearsExperience)
+                </td>
+                <td>
+                    <button type="button" data-url="@Url.Action("Edit", "EmployeeSkill", new { Id = item.Id })"
+                            class="btn btn-secondary btn-sm btn-open-modal btn-sm" data-toggle="modal" data-target=".bs-example-modal-md">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button type="button" data-url="@Url.Action("Delete", "EmployeeSkill", new { Id = item.Id })"
+                            class="btn btn-danger btn-sm btn-open-modal btn-sm" data-toggle="modal" data-target=".bs-example-modal-md">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
 <button type="button" data-url="@Url.Action("Create", "EmployeeSkill", new { Id = ViewBag.EmployeeId })"
         class="btn btn-outline-primary btn-open-modal" data-toggle="modal" data-target=".bs-example-modal-md">

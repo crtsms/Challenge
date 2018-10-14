@@ -20,44 +20,52 @@
     </a>
 </div>
 
-<table class="table table-striped">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table table-sm table-striped data-table display compact">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                <a href="@Url.Action("Details", "Employee", new { Id = item.Id })" class="btn btn-secondary btn-sm">
-                    <i class="fa fa-info-circle"></i>
-                </a>
-                <a href="@Url.Action("Edit", "Employee", new { Id = item.Id })" class="btn btn-primary btn-sm">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <a href="@Url.Action("Delete", "Employee", new { Id = item.Id })" class="btn btn-danger btn-sm">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th class="action-columm"></th>
         </tr>
-    }
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    <a href="@Url.Action("Details", "Employee", new { Id = item.Id })" class="btn btn-secondary btn-sm">
+                        <i class="fa fa-info-circle"></i>
+                    </a>
+                    <a href="@Url.Action("Edit", "Employee", new { Id = item.Id })" class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a href="@Url.Action("Delete", "Employee", new { Id = item.Id })" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
 
 </table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
