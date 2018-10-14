@@ -22,13 +22,11 @@ namespace WebApplication.Api
         [ResponseType(typeof(EmployeeVM))]
         public async Task<IHttpActionResult> GetEmployee(int id)
         {
-            if (id == null)
-                return BadRequest();
 
             //Retrieve the Employee information and Map to ModeView
             EmployeeVM employeeVM = await db.Employees.FindAsync(id);
             if (employeeVM == null)
-                return BadRequest();
+                return NotFound();
 
             return Ok(employeeVM);
 

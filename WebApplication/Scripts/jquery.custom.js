@@ -21,5 +21,8 @@
             $(placeHolder).html(result);
         });
     });
-
+    $('#main-modal').on('hidden.bs.modal', function () {
+        var placeHolder = $('.modal-content');
+        placeHolder.html("<div class='spinner'></div> <br /> <br /></div >");
+    });
 });

@@ -17,6 +17,10 @@ namespace WebApplication
             bundles.Add(new ScriptBundle("~/bundles/jquerycustom").Include(
                         "~/Scripts/jquery.custom.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                        "~/Scripts/datatables.min.js",
+                        "~/Scripts/datatables.config.js"));
+
             // Use a versão em desenvolvimento do Modernizr para desenvolver e aprender. Em seguida, quando estiver
             // pronto para a produção, utilize a ferramenta de build em https://modernizr.com para escolher somente os testes que precisa.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -30,6 +34,7 @@ namespace WebApplication
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-grid.css",
                       "~/Content/bootstrap-rebot.css",
+                      "~/Content/datatables.min.css",
                       "~/Content/Site.css",
                       "~/Content/loading.css")
                 .Include("~/Content/font-awesome.css", new CssRewriteUrlTransform()));

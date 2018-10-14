@@ -26,10 +26,10 @@
         <div class="navbar-collapse collapse" id="navbarCollapse" style="">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    @Html.ActionLink("Employees", "Index", "Employee", null, new { @class = "nav-link" } )
+                    @Html.ActionLink("Employees", "Index", "Employee", null, new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
-                    @Html.ActionLink("Skills", "Index", "Skill", null, new { @class = "nav-link" } )
+                    @Html.ActionLink("Skills", "Index", "Skill", null, new { @class = "nav-link" })
                 </li>
             </ul>
         </div>
@@ -39,7 +39,7 @@
 
         @RenderBody()
 
-        <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog">
+        <div class="modal fade bs-example-modal-md" id="main-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <div class="spinner"></div><br /><br />
@@ -56,6 +56,7 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/datatables")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/jquerycustom")
     @RenderSection("scripts", required: false)
