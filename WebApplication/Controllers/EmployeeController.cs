@@ -13,7 +13,7 @@ namespace WebApplication.Controllers
     public class EmployeeController : Controller
     {
         //Database context
-        private TreamsContext db = new TreamsContext();
+        private HRContext db = new HRContext();
 
         // GET: Employee
         public async Task<ActionResult> Index()

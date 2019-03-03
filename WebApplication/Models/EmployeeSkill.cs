@@ -6,7 +6,7 @@ namespace WebApplication.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("EmployeeSkill")]
+    [Table("HR_EmployeeSkill")]
     public partial class EmployeeSkill
     {
         public int Id { get; set; }

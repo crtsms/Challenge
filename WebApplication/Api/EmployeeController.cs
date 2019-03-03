@@ -16,7 +16,7 @@ namespace WebApplication.Api
 {
     public class EmployeeController : ApiController
     {
-        private TreamsContext db = new TreamsContext();
+        private HRContext db = new HRContext();
 
         // GET: api/Employee/5
         [ResponseType(typeof(EmployeeVM))]

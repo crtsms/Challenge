@@ -6,14 +6,14 @@ namespace WebApplication.DAL
     using System.Linq;
     using WebApplication.Model;
 
-    public partial class TreamsContext : DbContext
+    public partial class HRContext : DbContext
     {
 
         /// <summary>
         /// Context of execution on EF
         /// </summary>
-        public TreamsContext()
-            : base("name=TreamsContext")
+        public HRContext()
+            : base("name=HRContext")
         {
         }
 

@@ -16,7 +16,7 @@ namespace WebApplication.Controllers
     public class EmployeeSkillController : Controller
     {
         //Database context
-        private TreamsContext db = new TreamsContext();
+        private HRContext db = new HRContext();
 
         // GET: EmployeeSkill
         public async Task<ActionResult> Index(int id)
