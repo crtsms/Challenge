@@ -24,7 +24,7 @@ namespace WebApplication.Api
         {
 
             //Retrieve the Employee information and Map to ModeView
-            EmployeeVM employeeVM = await db.Employees.FindAsync(id).Include(employee => employee.EmployeeSkills);
+            EmployeeVM employeeVM = await db.Employees.FindAsync(id);
             if (employeeVM == null)
                 return NotFound();
 

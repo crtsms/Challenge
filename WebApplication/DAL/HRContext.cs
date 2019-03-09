@@ -15,6 +15,7 @@ namespace WebApplication.DAL
         public HRContext()
             : base("name=HRContext")
         {
+            this.Configuration.LazyLoadingEnabled = false;
         }
 
         /// <summary>
