@@ -216,7 +216,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Skill.cs" />
-    <Compile Include="DAL\HRContext.cs" />
+    <Compile Include="Models\Context.cs" />
     <Compile Include="ViewModels\EmployeeSkillVM.cs" />
     <Compile Include="ViewModels\EmployeeVM.cs" />
     <Compile Include="ViewModels\SkillVM.cs" />

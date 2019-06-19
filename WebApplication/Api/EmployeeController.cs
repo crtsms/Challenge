@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using WebApplication.DAL;
 using WebApplication.ViewModels;
+using WebApplication.Model;
 
 namespace WebApplication.Api
 {
     public class EmployeeController : ApiController
     {
-        private HRContext db = new HRContext();
+        private Context db = new Context();
 
         // GET: api/Employee/5
         [ResponseType(typeof(EmployeeVM))]
@@ -24,7 +20,7 @@ namespace WebApplication.Api
         {
 
             //Retrieve the Employee information and Map to ModeView
-            EmployeeVM employeeVM = await db.Employees.FindAsync(id);
+            EmployeeVM employeeVM = await db.Employees.Include(x => x.EmployeeSkills).FirstOrDefaultAsync(x => x.Id == id);
             if (employeeVM == null)
                 return NotFound();
 

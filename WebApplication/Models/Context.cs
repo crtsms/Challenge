@@ -1,19 +1,15 @@
-namespace WebApplication.DAL
+namespace WebApplication.Model
 {
-    using System;
     using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-    using WebApplication.Model;
 
-    public partial class HRContext : DbContext
+    public partial class Context : DbContext
     {
 
         /// <summary>
         /// Context of execution on EF
         /// </summary>
-        public HRContext()
-            : base("name=HRContext")
+        public Context()
+            : base("name=TSBContext")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }

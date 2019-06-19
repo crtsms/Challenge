@@ -1,35 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using WebApplication.DAL;
-using WebApplication.ViewModels;
 using WebApplication.Model;
+using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
 {
     public class EmployeeSkillController : Controller
     {
         //Database context
-        private HRContext db = new HRContext();
+        private Context db = new Context();
 
         // GET: EmployeeSkill
         public async Task<ActionResult> Index(int id)
         {
             //Retrieve the Employee information and Map 
             List<EmployeeSkillVM> employeeSkillVM = new List<EmployeeSkillVM>();
-            foreach (EmployeeSkill employeeSkill in await db.EmployeeSkills.Where(x => x.EmployeeId == id).ToListAsync())
+            foreach (EmployeeSkill employeeSkill in await db.EmployeeSkills.Where(x => x.EmployeeId == id).Include("Skill").ToListAsync())
                 employeeSkillVM.Add(employeeSkill);
 
             //return ID in view bag, in case of employee don't have any skill yet
             //this ID is used in the link to add new skill
             ViewBag.EmployeeId = id;
-
+                
             return View(employeeSkillVM);
         }
 
@@ -84,7 +81,7 @@ namespace WebApplication.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             //Retrieve the Employee information and Map to ModeView
-            EmployeeSkillVM employeeSkillVM = await db.EmployeeSkills.FindAsync(id);
+            EmployeeSkillVM employeeSkillVM = await db.EmployeeSkills.Include("Skill").FirstOrDefaultAsync(x => x.Id == id);
 
             //Retrieve all skill on database not assigned to Employee
             var skills = (from s in db.Skills
@@ -126,7 +123,7 @@ namespace WebApplication.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);            
 
             //Retrieve Employee information for user comfirmation before delete
-            EmployeeSkillVM employeeSkillVM = await db.EmployeeSkills.FindAsync(id);
+            EmployeeSkillVM employeeSkillVM = await db.EmployeeSkills.Include("Skill").FirstOrDefaultAsync(x => x.Id == id);
             if (employeeSkillVM == null)
                 return HttpNotFound();
 
@@ -139,7 +136,7 @@ namespace WebApplication.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             //Delete the Skill
-            EmployeeSkill employeeSkill = await db.EmployeeSkills.FindAsync(id);
+            EmployeeSkill employeeSkill = await db.EmployeeSkills.FirstOrDefaultAsync(x => x.Id == id);
             db.EmployeeSkills.Remove(employeeSkill);
 
             //Call the EF to save chages

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using WebApplication.DAL;
 using WebApplication.Model;
 using WebApplication.ViewModels;
 
@@ -13,7 +12,7 @@ namespace WebApplication.Controllers
     public class SkillController : Controller
     {
         //Database context
-        private HRContext db = new HRContext();
+        private Context db = new Context();
 
         // GET: Skill
         public async Task<ActionResult> Index()
