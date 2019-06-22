@@ -1,0 +1,54 @@
+-- Teste VIM
+-- Changing the skill
+ALTER TABLE dbo.HR_EmployeeSkill
+DROP CONSTRAINT FK_EmployeeSkill_SkillId;  
+--
+ALTER TABLE HR_Skill DROP CONSTRAINT PK_Skill
+--
+ALTER TABLE HR_Skill drop COLUMN Id
+--
+ALTER TABLE HR_Skill ADD [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY 
+NONCLUSTERED DEFAULT NEWID()
+--
+--Changing the employee
+ALTER TABLE dbo.HR_EmployeeSkill
+DROP CONSTRAINT FK_EmployeeSkill_EmployeeId;  
+--
+ALTER TABLE HR_Employee DROP CONSTRAINT PK_Employee
+--
+ALTER TABLE HR_Employee drop COLUMN Id
+--
+ALTER TABLE HR_Employee ADD [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY 
+NONCLUSTERED DEFAULT NEWID()
+--
+--Changing the EmployeeSkill
+ALTER TABLE HR_EmployeeSkill DROP CONSTRAINT PK_EmployeeSkill
+--
+ALTER TABLE HR_EmployeeSkill drop COLUMN Id
+--
+ALTER TABLE HR_EmployeeSkill ADD [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY 
+NONCLUSTERED DEFAULT NEWID()
+--
+drop index IX_EmployeeSkill_EmployeeId_SkillId on HR_EmployeeSkill
+--
+ALTER TABLE HR_EmployeeSkill drop COLUMN SkillId
+ALTER TABLE HR_EmployeeSkill drop COLUMN EmployeeId
+--
+ALTER TABLE HR_EmployeeSkill ADD [SkillId] UNIQUEIDENTIFIER NOT NULL
+ALTER TABLE HR_EmployeeSkill ADD [EmployeeId] UNIQUEIDENTIFIER NOT NULL
+--
+ALTER TABLE HR_EmployeeSkill
+ADD CONSTRAINT FK_EmployeeSkill_SkillId FOREIGN KEY (SkillId)     
+    REFERENCES HR_Skill (Id)     
+    ON DELETE CASCADE    
+    ON UPDATE CASCADE  
+--
+ALTER TABLE HR_EmployeeSkill
+ADD CONSTRAINT FK_EmployeeSkill_EmployeeId FOREIGN KEY (EmployeeId)     
+    REFERENCES HR_Employee (Id)     
+    ON DELETE CASCADE    
+    ON UPDATE CASCADE  
+--
+select * from HR_Employee
+select * from HR_Skill
+select * from HR_EmployeeSkill
