@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  api:
+    image: challenge/api:${TAG:-latest}
+    build:
+      context: API
+      dockerfile: Dockerfile
+    ports:
+      - "5100:8080"
