@@ -1,0 +1,62 @@
+[
+    {
+        "Name": "Programming",
+        "Description": "Ability to write, design, and test code for software applications."
+    },
+    {
+        "Name": "Graphic Design",
+        "Description": "Creating visual content using various tools and techniques."
+    },
+    {
+        "Name": "Data Analysis",
+        "Description": "Analyzing and interpreting complex data sets to extract valuable insights."
+    },
+    {
+        "Name": "Project Management",
+        "Description": "Planning, executing, and closing projects efficiently and effectively."
+    },
+    {
+        "Name": "Communication",
+        "Description": "Expressing ideas clearly and effectively, both verbally and in writing."
+    },
+    {
+        "Name": "Problem Solving",
+        "Description": "Analyzing problems and finding effective solutions."
+    },
+    {
+        "Name": "Time Management",
+        "Description": "Efficiently organizing and prioritizing tasks to meet deadlines."
+    },
+    {
+        "Name": "Team Collaboration",
+        "Description": "Working effectively with others to achieve common goals."
+    },
+    {
+        "Name": "Customer Service",
+        "Description": "Providing excellent service and support to customers."
+    },
+    {
+        "Name": "Leadership",
+        "Description": "Guiding and motivating a team to achieve shared objectives."
+    },
+    {
+        "Name": "Adaptability",
+        "Description": "Quickly adjusting to new conditions and evolving situations."
+    },
+    {
+        "Name": "Critical Thinking",
+        "Description": "Evaluating information and making reasoned decisions."
+    },
+    {
+        "Name": "Negotiation",
+        "Description": "Reaching mutually beneficial agreements through effective communication."
+    },
+    {
+        "Name": "Creativity",
+        "Description": "Thinking outside the box to generate innovative ideas and solutions."
+    },
+    {
+        "Name": "Networking",
+        "Description": "Building and maintaining professional relationships for mutual benefit."
+    }
+]
